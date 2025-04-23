@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "@/utils/auth";
@@ -6,11 +5,11 @@ import Header from "@/components/Header";
 import BalanceCard from "@/components/BalanceCard";
 import PriceChart from "@/components/PriceChart";
 import CoinConverter from "@/components/CoinConverter";
+import WithdrawButton from "@/components/WithdrawButton";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  // Check authentication on mount
   useEffect(() => {
     if (!isAuthenticated()) {
       navigate("/");
@@ -26,6 +25,7 @@ const Dashboard = () => {
           <div className="md:col-span-1">
             <div className="space-y-6">
               <BalanceCard />
+              <WithdrawButton />
               <CoinConverter />
             </div>
           </div>
