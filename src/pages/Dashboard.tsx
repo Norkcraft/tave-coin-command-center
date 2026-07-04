@@ -7,6 +7,8 @@ import BalanceCard from "@/components/BalanceCard";
 import PriceChart from "@/components/PriceChart";
 import CoinConverter from "@/components/CoinConverter";
 import WithdrawButton from "@/components/WithdrawButton";
+import DepositButton from "@/components/DepositButton";
+import MarketStatsCard from "@/components/MarketStatsCard";
 import CountdownTimer from "@/components/CountdownTimer";
 import GrowthInfoTooltip from "@/components/GrowthInfoTooltip";
 import RefreshButton from "@/components/RefreshButton";
@@ -50,13 +52,19 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
           <div className="md:col-span-1 flex flex-col gap-6">
             <BalanceCard key={refresh} />
-            <WithdrawButton />
+            <div className="grid grid-cols-2 gap-3">
+              <DepositButton />
+              <WithdrawButton />
+            </div>
             <CoinConverter />
             <TransactionHistory />
           </div>
           
           <div className="md:col-span-2">
             <PriceChart key={refresh} />
+            <div className="mt-6">
+              <MarketStatsCard key={refresh} />
+            </div>
           </div>
         </div>
       </div>

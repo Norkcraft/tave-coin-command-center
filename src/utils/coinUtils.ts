@@ -9,7 +9,7 @@ const DAILY_GROWTH_RATE = 0.015; // 1.5% daily growth rate
 // Fixed reference date: 5 months before launch. This is pinned so the
 // price and balance keep compounding forward over time based on the
 // model (1.5%/day for price, +$10k/day for balance) instead of resetting.
-const REFERENCE_DATE = new Date(2026, 1, 4); // Feb 4, 2026 (~5 months before launch)
+const REFERENCE_DATE = new Date(2026, 0, 4); // Jan 4, 2026 (6 months before launch)
 
 // Fractional days since reference so price/balance tick smoothly, not in daily jumps.
 const getDaysSinceReference = (): number => {
@@ -82,3 +82,24 @@ export const formatLargeNumber = (value: number): string => {
   }
   return value.toFixed(2);
 };
+
+// 24h price change percentage based on the growth model
+export const get24hChange = (): number => {
+  const now = getCurrentPrice();
+  const yesterdayPrice = INITIAL_COIN_PRICE * Math.pow(1 + DAILY_GROWTH_RATE, getDaysSinceReference() - 1);
+  return ((now - yesterdayPrice) / yesterdayPrice) * 100;
+};
+
+// Simulated circulating supply (fixed) and derived market stats
+const CIRCULATING_SUPPLY = 250_000_000;
+
+export const getMarketCap = (): number => getCurrentPrice() * CIRCULATING_SUPPLY;
+
+export const get24hVolume = (): number => {
+  // Volume oscillates around ~8% of market cap using a sine of the current minute
+  const minute = new Date().getMinutes();
+  const factor = 0.08 + 0.02 * Math.sin((minute / 60) * Math.PI * 2);
+  return getMarketCap() * factor;
+};
+
+export const getAllTimeHigh = (): number => getCurrentPrice(); // Always at ATH in this model
