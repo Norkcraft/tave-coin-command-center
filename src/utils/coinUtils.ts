@@ -6,15 +6,15 @@ const DAILY_BALANCE_INCREASE = 10000; // Daily balance increase: $10,000
 const INITIAL_BALANCE = 150000; // Starting balance: $150,000
 const DAILY_GROWTH_RATE = 0.015; // 1.5% daily growth rate
 
-// Get days since a reference date (~5 months ago) so accumulated
-// profit reflects a realistic 5-month growth window.
+// Fixed reference date: 5 months before launch. This is pinned so the
+// price and balance keep compounding forward over time based on the
+// model (1.5%/day for price, +$10k/day for balance) instead of resetting.
+const REFERENCE_DATE = new Date(2026, 1, 4); // Feb 4, 2026 (~5 months before launch)
+
+// Fractional days since reference so price/balance tick smoothly, not in daily jumps.
 const getDaysSinceReference = (): number => {
-  const now = new Date();
-  const referenceDate = new Date(now);
-  referenceDate.setMonth(referenceDate.getMonth() - 5);
-  const diffTime = now.getTime() - referenceDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
+  const diffMs = Date.now() - REFERENCE_DATE.getTime();
+  return diffMs / (1000 * 60 * 60 * 24);
 };
 
 // Calculate the current Tave Coin price based on elapsed time
